@@ -1,0 +1,16 @@
+{
+	"apiVersion": 2,
+	"name": "wholesome-footnotes/wholesome-footnotes",
+	"version": "1.0.0",
+	"title": "Footnotes",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Select some text in your gutenberg blocks and insert a footnote. Includes a footnote block to insert at the bottom of your page, or template tag for your template.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wholesome-footnotes",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css"
+}
