@@ -12,29 +12,27 @@ class MyCustomButton extends Component {
 	}
 
 	componentDidMount() {
-		const blockOrder = wp.data.select( 'core/block-editor' ).getBlockOrder();
-		let i = 1;
-		wp.data.subscribe( () => {
-			const newBlockOrder = wp.data.select( 'core/block-editor' ).getBlockOrder();
+		// const blockOrder = wp.data.select( 'core/block-editor' ).getBlockOrder();
+		// let i = 1;
+		// wp.data.subscribe( () => {
+		// 	const newBlockOrder = wp.data.select( 'core/block-editor' ).getBlockOrder();
 
-			if ( blockOrder === newBlockOrder ) {
-				return;
-			}
+		// 	if ( blockOrder === newBlockOrder ) {
+		// 		return;
+		// 	}
 
-			console.log( 'ORDER CHANGED' );
+		// 	console.log( 'ORDER CHANGED' );
 
-			const { blocks } = this.props;
+		// 	const { blocks } = this.props;
 
-			blocks.forEach( ( block ) => {
-				// console.log( block );
-				if ( block.originalContent.includes( 'hello-world' ) ) {
-					console.log( 'SPECIAL', i );
-					i++;
-				}
-			} );
-
-			
-		});
+		// 	blocks.forEach( ( block ) => {
+		// 		// console.log( block );
+		// 		if ( block.originalContent.includes( 'hello-world' ) ) {
+		// 			console.log( 'SPECIAL', i );
+		// 			i++;
+		// 		}
+		// 	} );
+		// });
 	}
 	
 	render() {
@@ -108,3 +106,57 @@ registerFormatType(
 		edit: ConditionalButton,
 	}
 );
+
+const initialize = () => {
+	let blockOrder = [];
+	let lastBlockOrder = [];
+	let i = 1;
+	wp.data.subscribe( () => {
+		
+		if ( ! blockOrder ) {
+			blockOrder = wp.data.select( 'core/block-editor' ).getBlockOrder();
+		}
+
+		const blocks = wp.data.select( 'core/block-editor' ).getBlocks()
+		const newBlockOrder = wp.data.select( 'core/block-editor' ).getBlockOrder();
+
+		if ( ! blocks || blockOrder === newBlockOrder ) {
+			return;
+		}
+
+		if ( lastBlockOrder === newBlockOrder ) {
+			return;
+		}
+
+		console.log( 'ORDER CHANGED' );
+		let clientId = null;
+		let newContent = null;
+		let newBlock = null;
+		blocks.forEach( ( block ) => {
+			console.log( block );
+			if ( block.attributes.content.includes( 'hello-world' ) ) {
+				console.log( 'SPECIAL', i );
+				clientId = block.clientId;
+				newContent = block.attributes.content;
+				newContent = newContent.replace( 'class="hello-world">', 'class="hello-world"> ' + i );
+				newBlock = createBlock('core/paragraph', { content: newContent });
+				// wp.data.dispatch('core/block-editor').replaceBlock(
+				// 	block.clientId,
+				// 	cloneBlock( block ),
+				// );
+				i++;
+			}
+		} );
+
+		// wp.data.dispatch('core/block-editor').replaceBlock(
+		// 	clientId,
+		// 	newBlock,
+		// );
+		// GETTING INFINATE LOOP!
+
+		lastBlockOrder = newBlockOrder;
+		i = 1;
+	});
+}
+
+initialize();
