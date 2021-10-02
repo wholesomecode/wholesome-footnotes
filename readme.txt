@@ -1,55 +1,36 @@
 === Footnotes ===
 Contributors:      wholesomecode
-Tags:              block
+Tags:              block formats, format, footnotes
 Tested up to:      5.8.0
-Stable tag:        1.0.0
+Stable tag:        1.0.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Select some text in your gutenberg blocks and insert a footnote. Includes a footnote block to insert at the bottom of your page, or template tag for your template.
+Select text in your blocks and insert a footnote.
 
-== Description ==
+== Welcome Developer ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+Thank you for descovering my plugin. I hope that you find it usful, either as
+a standalone plugin for your WordPress website, or as parts for something 
+amazing that you are working on.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+If you want to make changes to the plugin just `cd` into this directory and 
+run `npm start`. That will compile all of the SCSS and JavaScript files.
+
+You can find corrosponding tutorials that explore those files further
+at [Wholesome Code](https://wholesomecode.ltd).
+
+Happy exploring.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
+To install Footnotes:
 
-e.g.
-
-1. Upload the plugin files to the `/wp-content/plugins/wholesome-footnotes` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
-
-
-== Frequently Asked Questions ==
-
-= A question that someone might have =
-
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
-
-== Screenshots ==
-
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Note that the plugin is only compatible with a WordPress Multisite Installation. 
+2. Upload the plugin files to the `/wp-content/plugins/wholesome-footnotes` directory, or install the plugin through the WordPress network plugins screen directly.
+3. Activate the plugin through the \'Plugins\' screen in WordPress
 
 == Changelog ==
 
 = 1.0.0 =
-* Release
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
+* Initial Plugin.
