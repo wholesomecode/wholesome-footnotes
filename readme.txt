@@ -10,6 +10,9 @@ Select text in your blocks and insert a footnote.
 
 == Welcome Developer ==
 
+*Please Note:* This plugin is *WORK IN PROGRESS*. Feel free to have a look around,
+it might do something, but at the moment it won't do it well.
+
 Thank you for descovering my plugin. I hope that you find it usful, either as
 a standalone plugin for your WordPress website, or as parts for something 
 amazing that you are working on.
