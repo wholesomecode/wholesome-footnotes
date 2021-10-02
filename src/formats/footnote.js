@@ -13,7 +13,8 @@ const setFootnoteNumbers = () => {
 	let i = 1;
 
 	const blocks = wp.data.select( 'core/block-editor' ).getBlocks();
-	const newBlocks = [];
+	const newBlocks = {};
+
 	blocks.forEach( ( block ) => {
 		const { content } = block.attributes;
 		if ( content.includes( 'class="wholesome-footnote"' ) ) {
@@ -24,24 +25,29 @@ const setFootnoteNumbers = () => {
 				if ( ! match.includes( newNumber ) ) {
 					const originalNumber = match.match( /<sup>[\S\s]*?<\/sup>/gi );
 					const newMatch = match.replace( originalNumber, newNumber );
-					newBlocks.push( {
-						...block,
-						newContent: content.replace( match, newMatch ),
-					} );
-				}
 
+					const selectedBlock = newBlocks[ block.clientId ];
+					if ( selectedBlock ) {
+						selectedBlock.newContent = selectedBlock.newContent.replace( match, newMatch );
+					} else {
+						newBlocks[ block.clientId ] = {
+							...block,
+							newContent: content.replace( match, newMatch ),
+						};
+					}
+				}
 				i++;
 			} );
-
-			newBlocks.forEach( ( block ) => {
-				const { name, newContent } = block;
-				const newBlock = createBlock( name, { content: newContent } );
-				dispatch( 'core/block-editor' ).replaceBlock(
-					block.clientId,
-					newBlock,
-				);
-			} );
 		}
+	} );
+
+	Object.values( newBlocks ).forEach( ( block ) => {
+		const { name, newContent } = block;
+		const newBlock = createBlock( name, { content: newContent } );
+		dispatch( 'core/block-editor' ).replaceBlock(
+			block.clientId,
+			newBlock,
+		);
 	} );
 };
 
