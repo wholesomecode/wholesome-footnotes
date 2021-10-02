@@ -1,4 +1,8 @@
+/*! ../plugins/transformations */
+
 /*! ./formats/footnote */
+
+/*! ./plugins/transformations */
 
 /*! @wordpress/block-editor */
 
@@ -43,3 +47,7 @@
 /*!*************************************!*\
   !*** external ["wp","blockEditor"] ***!
   \*************************************/
+
+/*!****************************************!*\
+  !*** ./src/plugins/transformations.js ***!
+  \****************************************/

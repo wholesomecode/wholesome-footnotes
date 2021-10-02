@@ -1,8 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 
-import withTimeStamp from '../containers/withTimeStamp';
-
 registerBlockType(
 	'wholesome/footnote',
 	{
@@ -21,7 +19,7 @@ registerBlockType(
 		apiVersion: 2,
 		category: 'design',
 		description: __( 'Footnote.', 'wholesome-footnote' ),
-		edit: withTimeStamp( ( { attributes } ) => {
+		edit: ( { attributes } ) => {
 			const { number, text, uid } = attributes;
 			return (
 				<a className="wholesome-footnote" href={ `#${ uid }` }>
@@ -29,7 +27,7 @@ registerBlockType(
 					<sup>{number}</sup>
 				</a>
 			);
-		} ),
+		},
 		icon: 'info-outline',
 		// parent: [ 'wholesome/block' ],
 		save: ( { attributes } ) => {
