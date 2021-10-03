@@ -1,3 +1,5 @@
+import './style.scss';
+
 // import './blocks/footnotes';
 import './formats/footnote';
 import { setFootnotesOnOrderChange } from './plugins/transformations';

@@ -4,34 +4,56 @@ import { dispatch, select, subscribe } from '@wordpress/data';
 export const setFootnoteNumbers = () => {
 	let i = 1;
 
-	const blocks = wp.data.select( 'core/block-editor' ).getBlocks();
-	const currentBlock = wp.data.select( 'core/block-editor' ).getSelectedBlock();
+	const blocks = select( 'core/block-editor' ).getBlocks();
+	const currentBlock = select( 'core/block-editor' ).getSelectedBlock();
 	const newBlocks = {};
 
 	blocks.forEach( ( block ) => {
 		const { content } = block.attributes;
-		if ( content.includes( 'class="wholesome-footnote"' ) ) {
-			const matches = content.match( /<a[\S\s]*? class="wholesome-footnote">[\S\s]*?<\/a>/gi );
-			matches.forEach( ( match ) => {
-				const newNumber = `<sup>${ i }</sup>`;
-
-				if ( ! match.includes( newNumber ) ) {
-					const originalNumber = match.match( /<sup>[\S\s]*?<\/sup>/gi );
-					const newMatch = match.replace( originalNumber, newNumber );
-
+		if ( content.includes( 'class="wholesome-footnote__number"' ) ) {
+			// Remove orphans.
+			const childMatches = content.match( /<sup[^<>]+"wholesome-footnote__number">[^<>]+<\/sup>\s/gi );
+			console.log( childMatches );
+			if ( childMatches ) {
+				childMatches.forEach( ( match ) => {
 					const selectedBlock = newBlocks[ block.clientId ];
 					if ( selectedBlock ) {
-						selectedBlock.newContent = selectedBlock.newContent.replace( match, newMatch );
+						selectedBlock.newContent = selectedBlock.newContent.replace( match, '' );
 					} else {
 						newBlocks[ block.clientId ] = {
 							...block,
-							newContent: content.replace( match, newMatch ),
+							newContent: content.replace( match, '' ),
 							isSelected: currentBlock && currentBlock.clientId === block.clientId,
 						};
 					}
-				}
-				i++;
-			} );
+				} );
+			}
+
+			// Reorder numbers.
+			const matches = content.match( /<a[\S\s]*? class="wholesome-footnote">[\S\s]*?<\/a>/gi );
+			console.log( matches );
+			if ( matches ) {
+				matches.forEach( ( match ) => {
+					const newNumber = `<sup class="wholesome-footnote__number">${ i }</sup>`;
+
+					if ( ! match.includes( newNumber ) ) {
+						const originalNumber = match.match( /<sup class="wholesome-footnote__number">[\S\s]*?<\/sup>/gi );
+						const newMatch = match.replace( originalNumber, newNumber );
+
+						const selectedBlock = newBlocks[ block.clientId ];
+						if ( selectedBlock ) {
+							selectedBlock.newContent = selectedBlock.newContent.replace( match, newMatch );
+						} else {
+							newBlocks[ block.clientId ] = {
+								...block,
+								newContent: content.replace( match, newMatch ),
+								isSelected: currentBlock && currentBlock.clientId === block.clientId,
+							};
+						}
+					}
+					i++;
+				} );
+			}
 		}
 	} );
 
@@ -51,8 +73,10 @@ export const setFootnoteNumbers = () => {
 
 const doReorderAndResubscribe = ( blockOrder, lastBlockOrder ) => {
 	setFootnoteNumbers();
+	const newBlockOrder = select( 'core/block-editor' ).getBlockOrder();
+	console.log( 'start subscription' );
 	// eslint-disable-next-line no-use-before-define
-	setFootnotesOnOrderChange( blockOrder, lastBlockOrder );
+	// setFootnotesOnOrderChange( blockOrder, lastBlockOrder );
 };
 
 export const setFootnotesOnOrderChange = ( blockOrder = [], lastBlockOrder = [] ) => {
@@ -77,6 +101,7 @@ export const setFootnotesOnOrderChange = ( blockOrder = [], lastBlockOrder = [] 
 		// Wait until Gutenberg has done the move.
 		setTimeout( () => {
 			doReorderAndResubscribe( blockOrder, lastBlockOrder );
+			console.log( 'unsubscribe' );
 			unsubscribe();
 		}, 500 );
 	} );
