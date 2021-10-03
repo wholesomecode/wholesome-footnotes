@@ -73,10 +73,13 @@ export const setFootnoteNumbers = () => {
 
 const doReorderAndResubscribe = ( blockOrder, lastBlockOrder ) => {
 	setFootnoteNumbers();
-	const newBlockOrder = select( 'core/block-editor' ).getBlockOrder();
-	console.log( 'start subscription' );
-	// eslint-disable-next-line no-use-before-define
-	// setFootnotesOnOrderChange( blockOrder, lastBlockOrder );
+
+	// @todo: Make this depend on async await.
+	setTimeout( () => {
+		const newBlockOrder = select( 'core/block-editor' ).getBlockOrder();
+		// eslint-disable-next-line no-use-before-define
+		setFootnotesOnOrderChange( newBlockOrder, newBlockOrder );
+	}, 500 );
 };
 
 export const setFootnotesOnOrderChange = ( blockOrder = [], lastBlockOrder = [] ) => {

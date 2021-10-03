@@ -571,10 +571,13 @@ const setFootnoteNumbers = () => {
 };
 
 const doReorderAndResubscribe = (blockOrder, lastBlockOrder) => {
-  setFootnoteNumbers();
-  const newBlockOrder = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)('core/block-editor').getBlockOrder();
-  console.log('start subscription'); // eslint-disable-next-line no-use-before-define
-  // setFootnotesOnOrderChange( blockOrder, lastBlockOrder );
+  setFootnoteNumbers(); // @todo: Make this depend on async await.
+
+  setTimeout(() => {
+    const newBlockOrder = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)('core/block-editor').getBlockOrder(); // eslint-disable-next-line no-use-before-define
+
+    setFootnotesOnOrderChange(newBlockOrder, newBlockOrder);
+  }, 500);
 };
 
 const setFootnotesOnOrderChange = (blockOrder = [], lastBlockOrder = []) => {
