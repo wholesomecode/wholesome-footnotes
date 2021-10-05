@@ -1,12 +1,15 @@
 import { createBlock } from '@wordpress/blocks';
 import { dispatch, select, subscribe } from '@wordpress/data';
 
-export const setFootnoteNumbers =  () => {
+export const setFootnoteNumbers = () => {
 	let i = 1;
 
 	const blocks = select( 'core/block-editor' ).getBlocks();
 	const currentBlock = select( 'core/block-editor' ).getSelectedBlock();
 	const newBlocks = {};
+	const meta = select('core/editor').getEditedPostAttribute('meta');
+	const footnotes = meta[ 'wholesome_footnotes' ] || [];
+	const uidOrder = {};
 
 	blocks.forEach( ( block ) => {
 		const { content } = block.attributes;
@@ -33,7 +36,8 @@ export const setFootnoteNumbers =  () => {
 			if ( matches ) {
 				matches.forEach( ( match ) => {
 					const newNumber = `<sup class="wholesome-footnote__number">${ i }</sup>`;
-
+					const regex = new RegExp( 'id="(.*?)"', 'gi' );
+					const uid = regex.exec( match )[ 1 ];
 					if ( ! match.includes( newNumber ) ) {
 						const originalNumber = match.match( /<sup class="wholesome-footnote__number">[\S\s]*?<\/sup>/gi );
 						const newMatch = match.replace( originalNumber, newNumber );
@@ -48,6 +52,9 @@ export const setFootnoteNumbers =  () => {
 								isSelected: currentBlock && currentBlock.clientId === block.clientId,
 							};
 						}
+						console.log( uid );
+						console.log( i );
+						uidOrder[uid] = i;
 					}
 					i++;
 				} );
@@ -67,6 +74,13 @@ export const setFootnoteNumbers =  () => {
 			dispatch( 'core/block-editor' ).selectBlock( newBlock.clientId );
 		}
 	} );
+
+	// Reorder UIDs.
+	// console.log( uidOrder );
+	// console.log( Object.keys(uidOrder).length );
+	if ( Object.keys( uidOrder ).length > 0) {
+		console.log( 'do reorder' );
+	}
 
 	return Promise.resolve();
 };

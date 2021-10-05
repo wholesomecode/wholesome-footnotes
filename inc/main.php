@@ -118,4 +118,18 @@ function register_post_meta() {
 			'type'          => 'array',
 		)
 	);
+
+	register_meta(
+		'post', // @todo, make this work on any post type.
+		'wholesome_footnotes',
+		array(
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'default'       => array(),
+			'show_in_rest'  => true,
+			'single'        => true,
+			'type'          => 'number',
+		)
+	);
 }

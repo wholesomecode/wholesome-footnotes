@@ -321,15 +321,13 @@ const FootnotesButton = props => {
   const [showPopover, setShowPopover] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [footnote, setFootnote] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const meta = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/editor').getEditedPostAttribute('meta'));
-  const footnotes = meta['wholesome_footnotes'] || [];
-  console.log('meta', meta);
-  console.log('footnotes', footnotes);
+  const footnotes = meta['wholesome_footnotes'] || []; // console.log( footnotes );
 
   const getActiveFootnote = () => {
     const uid = getActiveFootnoteUID();
-    const selectedFootnote = footnotes.filter(footnote => uid === footnote.uid);
+    const selectedFootnote = footnotes === null || footnotes === void 0 ? void 0 : footnotes.filter(footnote => uid === footnote.uid);
 
-    if (selectedFootnote.length) {
+    if (selectedFootnote && selectedFootnote.length) {
       var _selectedFootnote$;
 
       return ((_selectedFootnote$ = selectedFootnote[0]) === null || _selectedFootnote$ === void 0 ? void 0 : _selectedFootnote$.footnote) || '';
@@ -425,18 +423,25 @@ const FootnotesButton = props => {
         })));
       }
 
-      const newFootnotes = { ...footnotes
-      };
+      const newFootnotes = [...footnotes];
       const key = Object.keys(newFootnotes).find(key => newFootnotes[key].uid === uid) || 0;
-      let order = ((_newFootnotes$uid = newFootnotes[uid]) === null || _newFootnotes$uid === void 0 ? void 0 : _newFootnotes$uid.order) || 0;
-      newFootnotes[key] = {
+      const order = ((_newFootnotes$uid = newFootnotes[uid]) === null || _newFootnotes$uid === void 0 ? void 0 : _newFootnotes$uid.order) || 0;
+      const note = {
         uid,
         footnote,
         order
       };
+
+      if (key) {
+        newFootnotes[key] = note;
+      } else {
+        newFootnotes.push(note);
+      }
+
       (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.dispatch)('core/editor').editPost({
         meta: {
-          wholesome_footnotes: newFootnotes
+          wholesome_footnotes: newFootnotes,
+          wholesome_footnotes_updated: new Date().valueOf().toString()
         }
       });
       setShowPopover(false);
@@ -479,6 +484,9 @@ const setFootnoteNumbers = () => {
   const blocks = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)('core/block-editor').getBlocks();
   const currentBlock = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)('core/block-editor').getSelectedBlock();
   const newBlocks = {};
+  const meta = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)('core/editor').getEditedPostAttribute('meta');
+  const footnotes = meta['wholesome_footnotes'] || [];
+  const uidOrder = {};
   blocks.forEach(block => {
     const {
       content
@@ -509,6 +517,8 @@ const setFootnoteNumbers = () => {
       if (matches) {
         matches.forEach(match => {
           const newNumber = `<sup class="wholesome-footnote__number">${i}</sup>`;
+          const regex = new RegExp('id="(.*?)"', 'gi');
+          const uid = regex.exec(match)[1];
 
           if (!match.includes(newNumber)) {
             const originalNumber = match.match(/<sup class="wholesome-footnote__number">[\S\s]*?<\/sup>/gi);
@@ -523,6 +533,10 @@ const setFootnoteNumbers = () => {
                 isSelected: currentBlock && currentBlock.clientId === block.clientId
               };
             }
+
+            console.log(uid);
+            console.log(i);
+            uidOrder[uid] = i;
           }
 
           i++;
@@ -544,7 +558,14 @@ const setFootnoteNumbers = () => {
     if (isSelected) {
       (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.dispatch)('core/block-editor').selectBlock(newBlock.clientId);
     }
-  });
+  }); // Reorder UIDs.
+  // console.log( uidOrder );
+  // console.log( Object.keys(uidOrder).length );
+
+  if (Object.keys(uidOrder).length > 0) {
+    console.log('do reorder');
+  }
+
   return Promise.resolve();
 };
 

@@ -5,7 +5,7 @@
 // Import WordPress Components.
 import { RichTextToolbarButton, URLPopover } from '@wordpress/block-editor';
 import { Button, Modal } from '@wordpress/components';
-import { dispatch, select, useSelect } from '@wordpress/data';
+import { dispatch, useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { create, getTextContent, insert, registerFormatType, removeFormat, toggleFormat, useAnchorRef } from '@wordpress/rich-text';
@@ -33,13 +33,12 @@ const FootnotesButton = ( props ) => {
 	const meta = useSelect( ( select ) => select('core/editor').getEditedPostAttribute('meta') );
 	const footnotes = meta[ 'wholesome_footnotes' ] || [];
 
-	console.log( 'meta', meta );
-	console.log( 'footnotes', footnotes );
+	// console.log( footnotes );
 
 	const getActiveFootnote = () => {
 		const uid = getActiveFootnoteUID();
-		const selectedFootnote = footnotes.filter( footnote => uid === footnote.uid );		
-		if ( selectedFootnote.length ) {
+		const selectedFootnote = footnotes?.filter( footnote => uid === footnote.uid );		
+		if ( selectedFootnote && selectedFootnote.length ) {
 			return selectedFootnote[0]?.footnote || '';
 		}
 
@@ -132,19 +131,26 @@ const FootnotesButton = ( props ) => {
 								);
 							}
 
-							const newFootnotes = {...footnotes};
+							const newFootnotes = [...footnotes];
 							const key = Object.keys( newFootnotes ).find( key => newFootnotes[ key ].uid === uid ) || 0;
-							let order = newFootnotes[uid]?.order || 0;
+							const order = newFootnotes[uid]?.order || 0;
 
-							newFootnotes[ key ] = {
+							const note = {
 								uid,
 								footnote,
 								order,
 							};
 
+							if ( key ) {
+								newFootnotes[ key ] = note;
+							} else {
+								newFootnotes.push( note );
+							}
+
 							dispatch( 'core/editor' ).editPost( {
 								meta: {
 									wholesome_footnotes: newFootnotes,
+									wholesome_footnotes_updated: new Date().valueOf().toString(),
 								},
 							} );
 
