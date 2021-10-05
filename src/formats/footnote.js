@@ -5,7 +5,7 @@
 // Import WordPress Components.
 import { RichTextToolbarButton, URLPopover } from '@wordpress/block-editor';
 import { Button, Modal } from '@wordpress/components';
-import { select } from '@wordpress/data';
+import { dispatch, select, useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { create, getTextContent, insert, registerFormatType, removeFormat, toggleFormat, useAnchorRef } from '@wordpress/rich-text';
@@ -29,6 +29,11 @@ const FootnotesButton = ( props ) => {
 	// State to show popover.
 	const [ showPopover, setShowPopover ] = useState( false );
 	const [ footnote, setFootnote ] = useState( '' );
+
+	const meta = useSelect( ( select ) => select('core/editor').getEditedPostAttribute('meta') );
+	const footnotes = meta[ 'wholesome_footnotes' ] || [];
+
+	// console.log( footnotes );
 
 	// Function to get active colour from format.
 	const getActiveFootnote = () => {
@@ -143,7 +148,16 @@ const FootnotesButton = ( props ) => {
 								);
 							}
 
-							// @todo: Do something with the footnote and the id.
+							const newFootnotes = {...footnotes};
+
+							newFootnotes[uid] = footnote;
+
+							dispatch( 'core/editor' ).editPost( {
+								meta: {
+									wholesome_footnotes: newFootnotes,
+								},
+							} );
+
 							setShowPopover( false );
 							setFootnote( '' );
 							setFootnoteNumbers();

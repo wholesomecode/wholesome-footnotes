@@ -319,7 +319,10 @@ const FootnotesButton = props => {
   } = value; // State to show popover.
 
   const [showPopover, setShowPopover] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [footnote, setFootnote] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(''); // Function to get active colour from format.
+  const [footnote, setFootnote] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const meta = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/editor').getEditedPostAttribute('meta'));
+  const footnotes = meta['wholesome_footnotes'] || []; // console.log( footnotes );
+  // Function to get active colour from format.
 
   const getActiveFootnote = () => {
     const formats = activeFormats.filter(format => name === format.type);
@@ -340,7 +343,6 @@ const FootnotesButton = props => {
         const {
           id
         } = appliedAttributes;
-        console.log(id);
         return id;
       }
     }
@@ -436,9 +438,16 @@ const FootnotesButton = props => {
         onChange((0,_wordpress_rich_text__WEBPACK_IMPORTED_MODULE_5__.insert)(value, (0,_wordpress_rich_text__WEBPACK_IMPORTED_MODULE_5__.create)({
           html: FootnoteBlock(text, uid)
         })));
-      } // @todo: Do something with the footnote and the id.
+      }
 
-
+      const newFootnotes = { ...footnotes
+      };
+      newFootnotes[uid] = footnote;
+      (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.dispatch)('core/editor').editPost({
+        meta: {
+          wholesome_footnotes: newFootnotes
+        }
+      });
       setShowPopover(false);
       setFootnote('');
       (0,_plugins_transformations__WEBPACK_IMPORTED_MODULE_7__.setFootnoteNumbers)();

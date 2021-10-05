@@ -21,6 +21,8 @@ function setup() : void {
 
 	// Enqueue Block Styles for Frontend and Backend.
 	// add_action( 'enqueue_block_assets', __NAMESPACE__ . '\\enqueue_block_styles', 10 );
+
+	add_action( 'init', __NAMESPACE__ . '\\register_meta' );
 }
 
 /**
@@ -65,7 +67,6 @@ function enqueue_block_editor_assets() : void {
 		'wholesome-footnotes',
 		ROOT_DIR . '\languages'
 	);
-	
 }
 
 /**
@@ -82,5 +83,24 @@ function enqueue_block_styles() : void {
 		plugins_url( $styles, ROOT_FILE ),
 		array(),
 		filemtime( ROOT_DIR . $styles )
+	);
+}
+
+/**
+ * Register Meta.
+ *
+ * Register the meta fields so that we can update them directly from Gutenberg.
+ *
+ * @return void
+ */
+function register_meta() {
+	register_post_meta(
+		'post',
+		'wholesome_footnotes',
+		array(
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'array',
+		)
 	);
 }
