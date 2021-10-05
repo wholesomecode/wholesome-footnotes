@@ -1,4 +1,4 @@
-import './style.scss';
+import './editor.scss';
 
 // import './blocks/footnotes';
 import './formats/footnote';

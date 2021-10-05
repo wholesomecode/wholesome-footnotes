@@ -112,7 +112,7 @@ const FootnotesButton = ( props ) => {
 								if ( tinyMce ) {
 									tinyMce.focus();
 								}
-							}, 300 )
+							}, 500 )
 						}
 						value={ getActiveFootnote() }
 						toolbars={ {
@@ -129,7 +129,6 @@ const FootnotesButton = ( props ) => {
 							let uid = getActiveFootnoteUID();
 						
 							if ( ! footnote ) {
-								console.log( 'getting rid' );
 								onChange( toggleFormat( value, { type: name } ) ); // Remove Format.
 							}
 
@@ -148,7 +147,6 @@ const FootnotesButton = ( props ) => {
 							// @todo: Do something with the footnote and the id.
 							setShowPopover( false );
 							setFootnote( '' );
-							console.log( 'setting footnote numbers' );
 							setFootnoteNumbers();
 						}}
 						variant="secondary"

@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/style.scss":
-/*!************************!*\
-  !*** ./src/style.scss ***!
-  \************************/
+/***/ "./src/editor.scss":
+/*!*************************!*\
+  !*** ./src/editor.scss ***!
+  \*************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
@@ -411,7 +411,7 @@ const FootnotesButton = props => {
       if (tinyMce) {
         tinyMce.focus();
       }
-    }, 300),
+    }, 500),
     value: getActiveFootnote(),
     toolbars: {
       toolbar1: 'bold,italic,bullist,numlist,link,removeformat',
@@ -426,7 +426,6 @@ const FootnotesButton = props => {
       let uid = getActiveFootnoteUID();
 
       if (!footnote) {
-        console.log('getting rid');
         onChange((0,_wordpress_rich_text__WEBPACK_IMPORTED_MODULE_5__.toggleFormat)(value, {
           type: name
         })); // Remove Format.
@@ -442,7 +441,6 @@ const FootnotesButton = props => {
 
       setShowPopover(false);
       setFootnote('');
-      console.log('setting footnote numbers');
       (0,_plugins_transformations__WEBPACK_IMPORTED_MODULE_7__.setFootnoteNumbers)();
     },
     variant: "secondary"
@@ -456,25 +454,6 @@ const FootnotesButton = props => {
   tagName: 'a',
   title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Footnote', 'wholesome-footnotes')
 });
-
-/***/ }),
-
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
-/* harmony import */ var _formats_footnote__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./formats/footnote */ "./src/formats/footnote.js");
-/* harmony import */ var _plugins_transformations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/transformations */ "./src/plugins/transformations.js");
- // import './blocks/footnotes';
-
-
- // Change footnote numbers when the block order changes.
-
-(0,_plugins_transformations__WEBPACK_IMPORTED_MODULE_2__.setFootnotesOnOrderChange)();
 
 /***/ }),
 
@@ -508,7 +487,6 @@ const setFootnoteNumbers = () => {
     if (content.includes('class="wholesome-footnote__number"')) {
       // Remove orphans.
       const childMatches = content.match(/<sup[^<>]+"wholesome-footnote__number">[^<>]+<\/sup>\s/gi);
-      console.log(childMatches);
 
       if (childMatches) {
         childMatches.forEach(match => {
@@ -527,7 +505,6 @@ const setFootnoteNumbers = () => {
 
 
       const matches = content.match(/<a[\S\s]*? class="wholesome-footnote">[\S\s]*?<\/a>/gi);
-      console.log(matches);
 
       if (matches) {
         matches.forEach(match => {
@@ -568,16 +545,14 @@ const setFootnoteNumbers = () => {
       (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.dispatch)('core/block-editor').selectBlock(newBlock.clientId);
     }
   });
+  return Promise.resolve();
 };
 
-const doReorderAndResubscribe = (blockOrder, lastBlockOrder) => {
-  setFootnoteNumbers(); // @todo: Make this depend on async await.
+const doReorderAndResubscribe = async () => {
+  await setFootnoteNumbers();
+  const newBlockOrder = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)('core/block-editor').getBlockOrder(); // eslint-disable-next-line no-use-before-define
 
-  setTimeout(() => {
-    const newBlockOrder = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.select)('core/block-editor').getBlockOrder(); // eslint-disable-next-line no-use-before-define
-
-    setFootnotesOnOrderChange(newBlockOrder, newBlockOrder);
-  }, 500);
+  setFootnotesOnOrderChange(newBlockOrder, newBlockOrder);
 };
 
 const setFootnotesOnOrderChange = (blockOrder = [], lastBlockOrder = []) => {
@@ -600,8 +575,7 @@ const setFootnotesOnOrderChange = (blockOrder = [], lastBlockOrder = []) => {
     lastBlockOrder = newBlockOrder; // Wait until Gutenberg has done the move.
 
     setTimeout(() => {
-      doReorderAndResubscribe(blockOrder, lastBlockOrder);
-      console.log('unsubscribe');
+      doReorderAndResubscribe();
       unsubscribe();
     }, 500);
   });
@@ -735,44 +709,7 @@ module.exports = window["wp"]["richText"];
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/chunk loaded */
-/******/ 	!function() {
-/******/ 		var deferred = [];
-/******/ 		__webpack_require__.O = function(result, chunkIds, fn, priority) {
-/******/ 			if(chunkIds) {
-/******/ 				priority = priority || 0;
-/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
-/******/ 				deferred[i] = [chunkIds, fn, priority];
-/******/ 				return;
-/******/ 			}
-/******/ 			var notFulfilled = Infinity;
-/******/ 			for (var i = 0; i < deferred.length; i++) {
-/******/ 				var chunkIds = deferred[i][0];
-/******/ 				var fn = deferred[i][1];
-/******/ 				var priority = deferred[i][2];
-/******/ 				var fulfilled = true;
-/******/ 				for (var j = 0; j < chunkIds.length; j++) {
-/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every(function(key) { return __webpack_require__.O[key](chunkIds[j]); })) {
-/******/ 						chunkIds.splice(j--, 1);
-/******/ 					} else {
-/******/ 						fulfilled = false;
-/******/ 						if(priority < notFulfilled) notFulfilled = priority;
-/******/ 					}
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferred.splice(i--, 1)
-/******/ 					var r = fn();
-/******/ 					if (r !== undefined) result = r;
-/******/ 				}
-/******/ 			}
-/******/ 			return result;
-/******/ 		};
-/******/ 	}();
-/******/ 	
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	!function() {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
@@ -813,70 +750,24 @@ module.exports = window["wp"]["richText"];
 /******/ 		};
 /******/ 	}();
 /******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	!function() {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"index": 0,
-/******/ 			"style-index": 0
-/******/ 		};
-/******/ 		
-/******/ 		// no chunk on demand loading
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		__webpack_require__.O.j = function(chunkId) { return installedChunks[chunkId] === 0; };
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
-/******/ 			var chunkIds = data[0];
-/******/ 			var moreModules = data[1];
-/******/ 			var runtime = data[2];
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some(function(id) { return installedChunks[id] !== 0; })) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkIds[i]] = 0;
-/******/ 			}
-/******/ 			return __webpack_require__.O(result);
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkwholesome_footnotes"] = self["webpackChunkwholesome_footnotes"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	}();
-/******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["style-index"], function() { return __webpack_require__("./src/index.js"); })
-/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+!function() {
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
+/* harmony import */ var _formats_footnote__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./formats/footnote */ "./src/formats/footnote.js");
+/* harmony import */ var _plugins_transformations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/transformations */ "./src/plugins/transformations.js");
+ // import './blocks/footnotes';
+
+
+ // Change footnote numbers when the block order changes.
+
+(0,_plugins_transformations__WEBPACK_IMPORTED_MODULE_2__.setFootnotesOnOrderChange)();
+}();
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

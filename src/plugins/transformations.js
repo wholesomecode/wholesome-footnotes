@@ -1,7 +1,7 @@
 import { createBlock } from '@wordpress/blocks';
 import { dispatch, select, subscribe } from '@wordpress/data';
 
-export const setFootnoteNumbers = () => {
+export const setFootnoteNumbers =  () => {
 	let i = 1;
 
 	const blocks = select( 'core/block-editor' ).getBlocks();
@@ -13,7 +13,6 @@ export const setFootnoteNumbers = () => {
 		if ( content.includes( 'class="wholesome-footnote__number"' ) ) {
 			// Remove orphans.
 			const childMatches = content.match( /<sup[^<>]+"wholesome-footnote__number">[^<>]+<\/sup>\s/gi );
-			console.log( childMatches );
 			if ( childMatches ) {
 				childMatches.forEach( ( match ) => {
 					const selectedBlock = newBlocks[ block.clientId ];
@@ -31,7 +30,6 @@ export const setFootnoteNumbers = () => {
 
 			// Reorder numbers.
 			const matches = content.match( /<a[\S\s]*? class="wholesome-footnote">[\S\s]*?<\/a>/gi );
-			console.log( matches );
 			if ( matches ) {
 				matches.forEach( ( match ) => {
 					const newNumber = `<sup class="wholesome-footnote__number">${ i }</sup>`;
@@ -69,17 +67,15 @@ export const setFootnoteNumbers = () => {
 			dispatch( 'core/block-editor' ).selectBlock( newBlock.clientId );
 		}
 	} );
+
+	return Promise.resolve();
 };
 
-const doReorderAndResubscribe = ( blockOrder, lastBlockOrder ) => {
-	setFootnoteNumbers();
-
-	// @todo: Make this depend on async await.
-	setTimeout( () => {
-		const newBlockOrder = select( 'core/block-editor' ).getBlockOrder();
-		// eslint-disable-next-line no-use-before-define
-		setFootnotesOnOrderChange( newBlockOrder, newBlockOrder );
-	}, 500 );
+const doReorderAndResubscribe = async () => {
+	await setFootnoteNumbers();
+	const newBlockOrder = select( 'core/block-editor' ).getBlockOrder();
+	// eslint-disable-next-line no-use-before-define
+	setFootnotesOnOrderChange( newBlockOrder, newBlockOrder );
 };
 
 export const setFootnotesOnOrderChange = ( blockOrder = [], lastBlockOrder = [] ) => {
@@ -103,8 +99,7 @@ export const setFootnotesOnOrderChange = ( blockOrder = [], lastBlockOrder = [] 
 
 		// Wait until Gutenberg has done the move.
 		setTimeout( () => {
-			doReorderAndResubscribe( blockOrder, lastBlockOrder );
-			console.log( 'unsubscribe' );
+			doReorderAndResubscribe();
 			unsubscribe();
 		}, 500 );
 	} );

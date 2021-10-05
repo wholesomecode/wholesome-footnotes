@@ -40,11 +40,11 @@
 		}
 
 		/**
-    * Because the editor is wrapped in `<BaseControl />`, TinyMCE
-    * will inherit the BaseControl styles by default. Here, we are
-    * resetting the styles to match the Block Editor defaults, but
-    * you can change them if you wish.
-    */
+		 * Because the editor is wrapped in `<BaseControl />`, TinyMCE
+		 * will inherit the BaseControl styles by default. Here, we are
+		 * resetting the styles to match the Block Editor defaults, but
+		 * you can change them if you wish.
+		 */
 		.wysiwyg-control__body.mce-content-body {
 			color: #191e23;
 			font-family: 'Noto Serif', serif;

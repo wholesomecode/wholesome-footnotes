@@ -20,7 +20,7 @@ function setup() : void {
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\enqueue_block_editor_assets', 10 );
 
 	// Enqueue Block Styles for Frontend and Backend.
-	add_action( 'enqueue_block_assets', __NAMESPACE__ . '\\enqueue_block_styles', 10 );
+	// add_action( 'enqueue_block_assets', __NAMESPACE__ . '\\enqueue_block_styles', 10 );
 }
 
 /**
@@ -51,11 +51,21 @@ function enqueue_block_editor_assets() : void {
 		false
 	);
 
+	$styles = '/build/index.css';
+
+	wp_enqueue_style(
+		PLUGIN_SLUG . '-block-styles',
+		plugins_url( $styles, ROOT_FILE ),
+		array(),
+		filemtime( ROOT_DIR . $styles )
+	);
+
 	wp_set_script_translations(
 		PLUGIN_SLUG . '-block-scripts',
 		'wholesome-footnotes',
 		ROOT_DIR . '\languages'
 	);
+	
 }
 
 /**
