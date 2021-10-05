@@ -33,30 +33,14 @@ const FootnotesButton = ( props ) => {
 	const meta = useSelect( ( select ) => select('core/editor').getEditedPostAttribute('meta') );
 	const footnotes = meta[ 'wholesome_footnotes' ] || [];
 
-	// console.log( footnotes );
+	console.log( 'meta', meta );
+	console.log( 'footnotes', footnotes );
 
-	// Function to get active colour from format.
 	const getActiveFootnote = () => {
-		const formats = activeFormats.filter( ( format ) => name === format.type );
-
-		if ( formats.length > 0 ) {
-			const format = formats[ 0 ];
-			const { attributes, unregisteredAttributes } = format;
-
-			let appliedAttributes = unregisteredAttributes;
-
-			if ( attributes && attributes.length ) {
-				appliedAttributes = attributes;
-			}
-
-			if ( Object.prototype.hasOwnProperty.call( appliedAttributes, 'id' ) ) {
-				const { id } = appliedAttributes;
-				return id;
-			}
-		}
-
-		if ( footnote ) {
-			return footnote;
+		const uid = getActiveFootnoteUID();
+		const selectedFootnote = footnotes.filter( footnote => uid === footnote.uid );		
+		if ( selectedFootnote.length ) {
+			return selectedFootnote[0]?.footnote || '';
 		}
 
 		return '';
@@ -64,6 +48,7 @@ const FootnotesButton = ( props ) => {
 
 	const getActiveFootnoteUID = () => {
 		const formats = activeFormats.filter( ( format ) => name === format.type );
+
 		if ( formats.length > 0 ) {
 			const format = formats[ 0 ];
 			const { attributes, unregisteredAttributes } = format;
@@ -74,7 +59,6 @@ const FootnotesButton = ( props ) => {
 				appliedAttributes = attributes;
 			}
 
-			// If we have no attributes, use the active colour.
 			if ( ! appliedAttributes ) {
 				return '';
 			}
@@ -149,8 +133,14 @@ const FootnotesButton = ( props ) => {
 							}
 
 							const newFootnotes = {...footnotes};
+							const key = Object.keys( newFootnotes ).find( key => newFootnotes[ key ].uid === uid ) || 0;
+							let order = newFootnotes[uid]?.order || 0;
 
-							newFootnotes[uid] = footnote;
+							newFootnotes[ key ] = {
+								uid,
+								footnote,
+								order,
+							};
 
 							dispatch( 'core/editor' ).editPost( {
 								meta: {

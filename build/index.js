@@ -321,34 +321,18 @@ const FootnotesButton = props => {
   const [showPopover, setShowPopover] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [footnote, setFootnote] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const meta = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/editor').getEditedPostAttribute('meta'));
-  const footnotes = meta['wholesome_footnotes'] || []; // console.log( footnotes );
-  // Function to get active colour from format.
+  const footnotes = meta['wholesome_footnotes'] || [];
+  console.log('meta', meta);
+  console.log('footnotes', footnotes);
 
   const getActiveFootnote = () => {
-    const formats = activeFormats.filter(format => name === format.type);
+    const uid = getActiveFootnoteUID();
+    const selectedFootnote = footnotes.filter(footnote => uid === footnote.uid);
 
-    if (formats.length > 0) {
-      const format = formats[0];
-      const {
-        attributes,
-        unregisteredAttributes
-      } = format;
-      let appliedAttributes = unregisteredAttributes;
+    if (selectedFootnote.length) {
+      var _selectedFootnote$;
 
-      if (attributes && attributes.length) {
-        appliedAttributes = attributes;
-      }
-
-      if (Object.prototype.hasOwnProperty.call(appliedAttributes, 'id')) {
-        const {
-          id
-        } = appliedAttributes;
-        return id;
-      }
-    }
-
-    if (footnote) {
-      return footnote;
+      return ((_selectedFootnote$ = selectedFootnote[0]) === null || _selectedFootnote$ === void 0 ? void 0 : _selectedFootnote$.footnote) || '';
     }
 
     return '';
@@ -367,8 +351,7 @@ const FootnotesButton = props => {
 
       if (attributes && attributes.length) {
         appliedAttributes = attributes;
-      } // If we have no attributes, use the active colour.
-
+      }
 
       if (!appliedAttributes) {
         return '';
@@ -424,6 +407,8 @@ const FootnotesButton = props => {
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
     className: "button button-secondary",
     onClick: () => {
+      var _newFootnotes$uid;
+
       let text = (0,_wordpress_rich_text__WEBPACK_IMPORTED_MODULE_5__.getTextContent)(value).substring(value.start, value.end);
       let uid = getActiveFootnoteUID();
 
@@ -442,7 +427,13 @@ const FootnotesButton = props => {
 
       const newFootnotes = { ...footnotes
       };
-      newFootnotes[uid] = footnote;
+      const key = Object.keys(newFootnotes).find(key => newFootnotes[key].uid === uid) || 0;
+      let order = ((_newFootnotes$uid = newFootnotes[uid]) === null || _newFootnotes$uid === void 0 ? void 0 : _newFootnotes$uid.order) || 0;
+      newFootnotes[key] = {
+        uid,
+        footnote,
+        order
+      };
       (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.dispatch)('core/editor').editPost({
         meta: {
           wholesome_footnotes: newFootnotes

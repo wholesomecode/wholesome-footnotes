@@ -22,7 +22,8 @@ function setup() : void {
 	// Enqueue Block Styles for Frontend and Backend.
 	// add_action( 'enqueue_block_assets', __NAMESPACE__ . '\\enqueue_block_styles', 10 );
 
-	add_action( 'init', __NAMESPACE__ . '\\register_meta' );
+	// Register meta.
+	add_action( 'init', __NAMESPACE__ . '\\register_post_meta' );
 }
 
 /**
@@ -93,14 +94,28 @@ function enqueue_block_styles() : void {
  *
  * @return void
  */
-function register_meta() {
-	register_post_meta(
-		'post',
+function register_post_meta() {
+
+	register_meta(
+		'post', // @todo, make this work on any post type.
 		'wholesome_footnotes',
 		array(
-			'show_in_rest' => true,
-			'single'       => true,
-			'type'         => 'array',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'default'       => array(),
+			'show_in_rest'  => array(
+				'schema' => array(
+					'type'  => 'array',
+					'items' => array(
+						'footnote' => 'string',
+						'order'    => 'number',
+						'uid'      => 'string',
+					),
+				),
+			),
+			'single'        => true,
+			'type'          => 'array',
 		)
 	);
 }
