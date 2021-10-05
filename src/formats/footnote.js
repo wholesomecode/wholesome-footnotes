@@ -46,7 +46,6 @@ const FootnotesButton = ( props ) => {
 
 			if ( Object.prototype.hasOwnProperty.call( appliedAttributes, 'id' ) ) {
 				const { id } = appliedAttributes;
-				console.log( id );
 				return id;
 			}
 		}
