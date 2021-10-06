@@ -82,7 +82,11 @@ const FootnotesButton = ( props ) => {
 			{ showPopover && (
 				<Modal
 					className="footnotes-popover"
-					onRequestClose={ () => { setShowPopover( false );  } }
+					onRequestClose={ ( { type } ) => { 
+						if ( 'blur' !== type ) {
+							setShowPopover( false );  
+						}
+					} }
 					title={ __( 'Footnote', 'wholesome-footnotes' ) }
 				>
 					<WysiwygControl

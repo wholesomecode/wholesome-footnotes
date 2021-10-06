@@ -40,7 +40,7 @@ __webpack_require__.r(__webpack_exports__);
   apiVersion: 2,
   category: 'design',
   description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('A list of this posts footnotes.', 'wholesome-footnote'),
-  edit: props => {
+  edit: () => {
     const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
       className: 'wholesome-footnote-list'
     });
@@ -434,8 +434,12 @@ const FootnotesButton = props => {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Footnote', 'wholesome-footnotes')
   }), showPopover && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Modal, {
     className: "footnotes-popover",
-    onRequestClose: () => {
-      setShowPopover(false);
+    onRequestClose: ({
+      type
+    }) => {
+      if ('blur' !== type) {
+        setShowPopover(false);
+      }
     },
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Footnote', 'wholesome-footnotes')
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_WysiwygControl__WEBPACK_IMPORTED_MODULE_6__["default"], {

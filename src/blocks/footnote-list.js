@@ -9,7 +9,7 @@ registerBlockType(
 		apiVersion: 2,
 		category: 'design',
 		description: __( 'A list of this posts footnotes.', 'wholesome-footnote' ),
-		edit: ( props ) => {
+		edit: () => {
 			const blockProps = useBlockProps( {
 				className: 'wholesome-footnote-list',
 			} );
