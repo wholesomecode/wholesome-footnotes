@@ -14,6 +14,64 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/blocks/footnote-list.js":
+/*!*************************************!*\
+  !*** ./src/blocks/footnote-list.js ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.registerBlockType)('wholesome/footnote-list', {
+  apiVersion: 2,
+  category: 'design',
+  description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('A list of this posts footnotes.', 'wholesome-footnote'),
+  edit: props => {
+    const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
+      className: 'wholesome-footnote-list'
+    });
+    const meta = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/editor').getEditedPostAttribute('meta'));
+    let footnotes = meta['wholesome_footnotes'] || [];
+
+    if (!footnotes) {
+      return null; // @todo: put a message here.
+    }
+
+    footnotes = footnotes.sort((a, b) => a.order - b.order);
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", blockProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ol", null, footnotes.map(note => {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+        key: note.uid,
+        dangerouslySetInnerHTML: {
+          __html: note.footnote
+        }
+      });
+    })));
+  },
+  icon: 'editor-ol',
+  save: () => {},
+  supports: {
+    align: true
+  },
+  textdomain: 'wholesome-footnote',
+  title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Footnote List', 'wholesome-footnote')
+});
+
+/***/ }),
+
 /***/ "./src/components/WysiwygControl.js":
 /*!******************************************!*\
   !*** ./src/components/WysiwygControl.js ***!
@@ -492,7 +550,7 @@ const setFootnoteNumbers = () => {
       content
     } = block.attributes;
 
-    if (content.includes('class="wholesome-footnote__number"')) {
+    if (content !== null && content !== void 0 && content.includes('class="wholesome-footnote__number"')) {
       // Remove orphans.
       const childMatches = content.match(/<sup[^<>]+"wholesome-footnote__number">[^<>]+<\/sup>\s/gi);
 
@@ -796,14 +854,15 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
-/* harmony import */ var _formats_footnote__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./formats/footnote */ "./src/formats/footnote.js");
-/* harmony import */ var _plugins_transformations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./plugins/transformations */ "./src/plugins/transformations.js");
- // import './blocks/footnotes';
+/* harmony import */ var _blocks_footnote_list__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./blocks/footnote-list */ "./src/blocks/footnote-list.js");
+/* harmony import */ var _formats_footnote__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./formats/footnote */ "./src/formats/footnote.js");
+/* harmony import */ var _plugins_transformations__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/transformations */ "./src/plugins/transformations.js");
+
 
 
  // Change footnote numbers when the block order changes.
 
-(0,_plugins_transformations__WEBPACK_IMPORTED_MODULE_2__.setFootnotesOnOrderChange)();
+(0,_plugins_transformations__WEBPACK_IMPORTED_MODULE_3__.setFootnotesOnOrderChange)();
 }();
 /******/ })()
 ;

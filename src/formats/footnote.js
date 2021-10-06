@@ -30,7 +30,7 @@ const FootnotesButton = ( props ) => {
 	const [ showPopover, setShowPopover ] = useState( false );
 	const [ footnote, setFootnote ] = useState( '' );
 
-	const meta = useSelect( ( select ) => select('core/editor').getEditedPostAttribute('meta') );
+	const meta = useSelect( ( select ) => select( 'core/editor' ).getEditedPostAttribute( 'meta' ) );
 	const footnotes = meta[ 'wholesome_footnotes' ] || [];
 
 	const getActiveFootnote = () => {

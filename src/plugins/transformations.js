@@ -7,13 +7,13 @@ export const setFootnoteNumbers = () => {
 	const blocks = select( 'core/block-editor' ).getBlocks();
 	const currentBlock = select( 'core/block-editor' ).getSelectedBlock();
 	const newBlocks = {};
-	const meta = select('core/editor').getEditedPostAttribute('meta');
+	const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' );
 	const footnotes = meta[ 'wholesome_footnotes' ] || [];
 	const uidOrder = {};
 
 	blocks.forEach( ( block ) => {
 		const { content } = block.attributes;
-		if ( content.includes( 'class="wholesome-footnote__number"' ) ) {
+		if ( content?.includes( 'class="wholesome-footnote__number"' ) ) {
 			// Remove orphans.
 			const childMatches = content.match( /<sup[^<>]+"wholesome-footnote__number">[^<>]+<\/sup>\s/gi );
 			if ( childMatches ) {
