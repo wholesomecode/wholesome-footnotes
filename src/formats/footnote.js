@@ -33,8 +33,6 @@ const FootnotesButton = ( props ) => {
 	const meta = useSelect( ( select ) => select('core/editor').getEditedPostAttribute('meta') );
 	const footnotes = meta[ 'wholesome_footnotes' ] || [];
 
-	// console.log( footnotes );
-
 	const getActiveFootnote = () => {
 		const uid = getActiveFootnoteUID();
 		const selectedFootnote = footnotes?.filter( footnote => uid === footnote.uid );		
@@ -132,7 +130,7 @@ const FootnotesButton = ( props ) => {
 							}
 
 							const newFootnotes = [...footnotes];
-							const key = Object.keys( newFootnotes ).find( key => newFootnotes[ key ].uid === uid ) || 0;
+							const key = Object.keys( newFootnotes ).find( key => newFootnotes[ key ].uid === uid ) || null;
 							const order = newFootnotes[uid]?.order || 0;
 
 							const note = {

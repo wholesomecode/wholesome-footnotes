@@ -52,8 +52,7 @@ export const setFootnoteNumbers = () => {
 								isSelected: currentBlock && currentBlock.clientId === block.clientId,
 							};
 						}
-						console.log( uid );
-						console.log( i );
+
 						uidOrder[uid] = i;
 					}
 					i++;
@@ -75,11 +74,30 @@ export const setFootnoteNumbers = () => {
 		}
 	} );
 
+	const newFootnotes = [ ...footnotes ];
+	let hasFootnotesChanged = false;
+
 	// Reorder UIDs.
-	// console.log( uidOrder );
-	// console.log( Object.keys(uidOrder).length );
 	if ( Object.keys( uidOrder ).length > 0) {
-		console.log( 'do reorder' );
+		for ( const [ uid, order ] of Object.entries( uidOrder ) ) {
+			const key = Object.keys( newFootnotes ).find( ( key ) => newFootnotes[ key ].uid === uid ) || null;
+			if ( key ) {
+				newFootnotes[ key ] = {
+					...newFootnotes[ key ],
+					order,
+				};
+				hasFootnotesChanged = true;
+			}
+		}
+	}
+
+	if ( hasFootnotesChanged ) {
+		dispatch( 'core/editor' ).editPost( {
+			meta: {
+				wholesome_footnotes: newFootnotes,
+				wholesome_footnotes_updated: new Date().valueOf().toString(),
+			},
+		} );
 	}
 
 	return Promise.resolve();

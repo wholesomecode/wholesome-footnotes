@@ -321,7 +321,7 @@ const FootnotesButton = props => {
   const [showPopover, setShowPopover] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [footnote, setFootnote] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const meta = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/editor').getEditedPostAttribute('meta'));
-  const footnotes = meta['wholesome_footnotes'] || []; // console.log( footnotes );
+  const footnotes = meta['wholesome_footnotes'] || [];
 
   const getActiveFootnote = () => {
     const uid = getActiveFootnoteUID();
@@ -424,7 +424,7 @@ const FootnotesButton = props => {
       }
 
       const newFootnotes = [...footnotes];
-      const key = Object.keys(newFootnotes).find(key => newFootnotes[key].uid === uid) || 0;
+      const key = Object.keys(newFootnotes).find(key => newFootnotes[key].uid === uid) || null;
       const order = ((_newFootnotes$uid = newFootnotes[uid]) === null || _newFootnotes$uid === void 0 ? void 0 : _newFootnotes$uid.order) || 0;
       const note = {
         uid,
@@ -534,8 +534,6 @@ const setFootnoteNumbers = () => {
               };
             }
 
-            console.log(uid);
-            console.log(i);
             uidOrder[uid] = i;
           }
 
@@ -558,12 +556,30 @@ const setFootnoteNumbers = () => {
     if (isSelected) {
       (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.dispatch)('core/block-editor').selectBlock(newBlock.clientId);
     }
-  }); // Reorder UIDs.
-  // console.log( uidOrder );
-  // console.log( Object.keys(uidOrder).length );
+  });
+  const newFootnotes = [...footnotes];
+  let hasFootnotesChanged = false; // Reorder UIDs.
 
   if (Object.keys(uidOrder).length > 0) {
-    console.log('do reorder');
+    for (const [uid, order] of Object.entries(uidOrder)) {
+      const key = Object.keys(newFootnotes).find(key => newFootnotes[key].uid === uid) || null;
+
+      if (key) {
+        newFootnotes[key] = { ...newFootnotes[key],
+          order
+        };
+        hasFootnotesChanged = true;
+      }
+    }
+  }
+
+  if (hasFootnotesChanged) {
+    (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.dispatch)('core/editor').editPost({
+      meta: {
+        wholesome_footnotes: newFootnotes,
+        wholesome_footnotes_updated: new Date().valueOf().toString()
+      }
+    });
   }
 
   return Promise.resolve();
