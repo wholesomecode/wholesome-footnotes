@@ -1,0 +1,62 @@
+.wholesome-footnote {
+    color: inherit;
+    cursor: default;
+    outline: none;
+    text-decoration: none;
+}
+
+.wholesome-footnote__number {
+    cursor: pointer;
+    font-size: .5em;
+    margin-left: 2px;
+    text-decoration: underline;
+    vertical-align: super; 
+
+    &:after {
+        content: ']';
+    }
+
+    &:before {
+        content: '[';
+    }
+}
+
+.editor-styles-wrapper .wholesome-footnote-list,
+.wholesome-footnote-list {
+    border-top: 1px solid #333;
+
+    > ol {
+        counter-reset: item;
+        list-style: none;
+        margin-top: 1em;
+        padding-left: 0px;
+
+        > li.wholesome-footnote-list__item {
+            padding-left: .75em;
+            padding-right: 1em;
+            position: relative;
+
+            &:before{
+                content: counter(item);
+                counter-increment: item;
+                font-size: 0.5em;
+                left: 0px;
+                position: absolute;	
+                vertical-align:super;
+            }
+
+            > ol,
+            > ul {
+                padding-left: 1.25em;
+            }
+        }
+    }
+
+    :target {
+        background-color: #fff300;
+    }
+
+    .wholesome-footnote-list__item-back {
+        font-size: 0.5em;
+    }
+}

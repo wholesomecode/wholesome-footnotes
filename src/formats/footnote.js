@@ -18,7 +18,7 @@ const name = 'wholesome/footnotes';
 const FootnoteBlock = ( text, uid ) => {
 	const number = '0';
 	const matches = text.match( /<a[\S\s]*? class="wholesome-footnote">[\S\s]*?<\/a>/gi );
-	return `<a class="wholesome-footnote" id="${ uid }" href="#footnote-${ uid }">${ text }<sup class="wholesome-footnote__number">${ number }</sup></a>`;
+	return `<a aria-describedby="wholesome-footnote-list__heading" title="${__( 'Footnote' )}" class="wholesome-footnote" id="${ uid }" href="#footnote-${ uid }">${ text }<sup class="wholesome-footnote__number">${ number }</sup></a>`;
 };
 
 // Create Footnotes Button with Colour Selection Popover.

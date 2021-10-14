@@ -1,4 +1,5 @@
 import './editor.scss';
+import './style.scss';
 
 import './blocks/footnote-list';
 import './formats/footnote';

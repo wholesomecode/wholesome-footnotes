@@ -20,10 +20,13 @@ function setup() : void {
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\enqueue_block_editor_assets', 10 );
 
 	// Enqueue Block Styles for Frontend and Backend.
-	// add_action( 'enqueue_block_assets', __NAMESPACE__ . '\\enqueue_block_styles', 10 );
+	add_action( 'enqueue_block_assets', __NAMESPACE__ . '\\enqueue_block_styles', 10 );
 
 	// Register meta.
 	add_action( 'init', __NAMESPACE__ . '\\register_post_meta' );
+
+	// Register blocks.
+	add_action( 'init', __NAMESPACE__ . '\\register_blocks', 20 );
 }
 
 /**
@@ -80,7 +83,7 @@ function enqueue_block_styles() : void {
 	$styles = '/build/style-index.css';
 
 	wp_enqueue_style(
-		PLUGIN_SLUG . '-block-styles',
+		PLUGIN_SLUG . '-styles',
 		plugins_url( $styles, ROOT_FILE ),
 		array(),
 		filemtime( ROOT_DIR . $styles )
@@ -130,6 +133,61 @@ function register_post_meta() {
 			'show_in_rest'  => true,
 			'single'        => true,
 			'type'          => 'number',
+		)
+	);
+}
+
+/**
+ * Register Blocks.
+ *
+ * @return void
+ */
+function register_blocks() {
+	register_block_type(
+		'wholesome/footnote-list',
+		array(
+			'render_callback' => function() {
+				$footnotes = get_post_meta( get_the_ID(), 'wholesome_footnotes', true );
+				if ( ! $footnotes ) {
+					return '';
+				}
+
+				ob_start();
+				?>
+				<aside class="wholesome-footnote-list">
+					<h2 id="wholesome-footnote-list__heading" class="screen-reader-text"><?php esc_html_e( 'Footnotes', 'wholesome-footnotes' ); ?></h2>
+					<ol>
+						<?php 
+						foreach ( $footnotes as $footnote ) {
+							$link    = ' <a class="wholesome-footnote-list__item-back" href="#' . esc_attr( $footnote['uid'] ) . 'aria-label="' . esc_html__( 'Back to content', 'wholesome-footnotes' ) . ' title="' . esc_html__( 'Back to content', 'wholesome-footnotes' ) . '">↵</a>';
+							$matches = null;
+							preg_match_all(
+								'/<.+?>/im',
+								$footnote['footnote'],
+								$matches,
+								PREG_PATTERN_ORDER				
+							);
+
+							$tags = $matches[0];
+							$note = $footnote['footnote'] . $link;
+
+							if ( is_array( $tags ) && ! empty( $tags ) ) {
+								$end_tag = $tags[ count( $tags ) - 1 ];
+								if ( $end_tag === '</ul>' || $end_tag === '</ol>' ) {
+									$end_tag = $tags[ count( $tags ) - 2 ];
+								}
+								$note = str_replace( $end_tag, $link . $end_tag, $footnote['footnote'] );
+							}
+							?>
+								<li id="footnote-<?php echo esc_attr( $footnote['uid'] ); ?>" class="wholesome-footnote-list__item"><?php echo wp_kses_post( $note ); ?></li>
+							<?php 
+						}
+						?>
+					</ol>
+				</aside>
+				<?php
+				return ob_get_clean();
+			},
 		)
 	);
 }
