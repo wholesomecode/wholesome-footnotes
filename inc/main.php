@@ -159,7 +159,7 @@ function register_blocks() {
 					<ol>
 						<?php 
 						foreach ( $footnotes as $footnote ) {
-							$link    = ' <a class="wholesome-footnote-list__item-back" href="#' . esc_attr( $footnote['uid'] ) . 'aria-label="' . esc_html__( 'Back to content', 'wholesome-footnotes' ) . ' title="' . esc_html__( 'Back to content', 'wholesome-footnotes' ) . '">↵</a>';
+							$link    = ' <a class="wholesome-footnote-list__item-back" href="#' . esc_attr( $footnote['uid'] ) . '" aria-label="' . esc_html__( 'Back to content', 'wholesome-footnotes' ) . ' title="' . esc_html__( 'Back to content', 'wholesome-footnotes' ) . '">↵</a>';
 							$matches = null;
 							preg_match_all(
 								'/<.+?>/im',
