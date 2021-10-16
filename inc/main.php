@@ -98,43 +98,46 @@ function enqueue_block_styles() : void {
  * @return void
  */
 function register_post_meta() {
+	$post_types = get_post_types();
 
-	register_meta(
-		'post', // @todo, make this work on any post type.
-		'wholesome_footnotes',
-		array(
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'default'       => array(),
-			'show_in_rest'  => array(
-				'schema' => array(
-					'type'  => 'array',
-					'items' => array(
-						'footnote' => 'string',
-						'order'    => 'number',
-						'uid'      => 'string',
+	foreach ( $post_types as $post_type ) {
+		register_meta(
+			$post_type,
+			'wholesome_footnotes',
+			array(
+				'auth_callback' => function() {
+					return current_user_can( 'edit_posts' );
+				},
+				'default'       => array(),
+				'show_in_rest'  => array(
+					'schema' => array(
+						'type'  => 'array',
+						'items' => array(
+							'footnote' => 'string',
+							'order'    => 'number',
+							'uid'      => 'string',
+						),
 					),
 				),
-			),
-			'single'        => true,
-			'type'          => 'array',
-		)
-	);
+				'single'        => true,
+				'type'          => 'array',
+			)
+		);
 
-	register_meta(
-		'post', // @todo, make this work on any post type.
-		'wholesome_footnotes',
-		array(
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'default'       => array(),
-			'show_in_rest'  => true,
-			'single'        => true,
-			'type'          => 'number',
-		)
-	);
+		register_meta(
+			$post_type,
+			'wholesome_footnotes',
+			array(
+				'auth_callback' => function() {
+					return current_user_can( 'edit_posts' );
+				},
+				'default'       => array(),
+				'show_in_rest'  => true,
+				'single'        => true,
+				'type'          => 'number',
+			)
+		);
+	}
 }
 
 /**

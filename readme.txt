@@ -2,16 +2,13 @@
 Contributors:      wholesomecode
 Tags:              block formats, format, footnotes
 Tested up to:      5.8.0
-Stable tag:        1.0.3
+Stable tag:        1.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Select text in your blocks and insert a footnote.
+Insert footnotes in your Gutenberg blocks and add a list view block to the bottom of your post.
 
 == Welcome Developer ==
-
-*Please Note:* This plugin is *WORK IN PROGRESS*. Feel free to have a look around,
-it might do something, but at the moment it might not do it well.
 
 Thank you for descovering my plugin. I hope that you find it usful, either as
 a standalone plugin for your WordPress website, or as parts for something 

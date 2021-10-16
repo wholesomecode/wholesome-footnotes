@@ -4,7 +4,7 @@
  *
  * Plugin Name:       Footnotes
  * Plugin URI:        https://wholesomecode.ltd/plugins/wholesome-footnotes
- * Description:       Select some text in your gutenberg blocks and insert a footnote.
+ * Description:       Insert footnotes in your Gutenberg blocks and add a list view block to the bottom of your post.
  * Requires at least: 5.8
  * Requires PHP:      7.0
  * Version:           1.0.0

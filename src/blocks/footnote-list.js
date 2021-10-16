@@ -17,8 +17,12 @@ registerBlockType(
 			const meta = useSelect( ( select ) => select( 'core/editor' ).getEditedPostAttribute( 'meta' ) );
 			let footnotes = meta.wholesome_footnotes || [];
 
-			if ( ! footnotes ) {
-				return null; // @todo: put a message here.
+			if ( ! footnotes.length ) {
+				return (
+					<aside { ...blockProps }>
+						<p>{ __( 'Please add a footnote.' ) }</p>
+					</aside>
+				);
 			}
 
 			footnotes = footnotes.sort( ( a, b ) => a.order - b.order );
@@ -29,8 +33,10 @@ registerBlockType(
 					<ol>
 						{ footnotes.map( ( note ) => {
 							const tags = note.footnote.match( /<.+?>/ig );
-							const backLink = ' <a class="wholesome-footnote-list__item-back" href="#${ note.uid }" aria-label="${__(\'Back to content\')}" title="${__(\'Back to content\')}">↵</a>';
-							
+							const backLink = ` <a class="wholesome-footnote-list__item-back" href="#${ note.uid }" `
+								+ `aria-label="${ __( 'Back to content' ) }" title="${ __( 'Back to content' ) }">`
+								+ `↵</a>`;
+
 							let footnote = note.footnote + backLink;
 
 							if ( tags ) {
@@ -42,7 +48,13 @@ registerBlockType(
 							}
 
 							return (
-								<li id={ 'footnote-' + note.uid } className="wholesome-footnote-list__item" key={ note.uid } dangerouslySetInnerHTML={ { __html: footnote } }/>
+								<li
+									className="wholesome-footnote-list__item"
+									// eslint-disable-next-line react/no-danger
+									dangerouslySetInnerHTML={ { __html: footnote } }
+									id={ `footnote-${ note.uid }` }
+									key={ note.uid }
+								/>
 							);
 						} )}
 					</ol>

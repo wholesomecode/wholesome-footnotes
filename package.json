@@ -1,7 +1,7 @@
 {
 	"name": "wholesome-footnotes",
 	"version": "1.0.0",
-	"description": "Select text in your blocks and insert a footnote.",
+	"description": "Insert footnotes in your Gutenberg blocks and add a list view block to the bottom of your post.",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
@@ -36,6 +36,7 @@
 		"stylelint-config-wordpress": "^17.0.0",
 		"stylelint-order": "^4.0.0",
 		"stylelint-webpack-plugin": "^1.2.3",
-		"terser-webpack-plugin": "^2.3.5"
+		"terser-webpack-plugin": "^2.3.5",
+		"webpack-zip-files-plugin": "^1.0.0"
 	}
 }
