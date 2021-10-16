@@ -3,7 +3,7 @@
  */
 
 /**
- * Load dependancies.
+ * Load dependencies.
  */
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 const IgnoreEmitWebPackPlugin = require( 'ignore-emit-webpack-plugin' );
@@ -91,7 +91,7 @@ module.exports = {
 			syntax: 'scss',
 		} ),
 	],
-};
+} ;
 
 // Prevent JS source maps in production.
 if ( isProduction ) {
