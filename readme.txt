@@ -22,6 +22,14 @@ at [Wholesome Code](https://wholesomecode.ltd).
 
 Happy exploring.
 
+== TODO ==
+- Better README file
+- React settings page
+- Add excerpt to footnote title (with settings option for this)
+- Full inline comments
+- Full PDF guide on how to build this plugin
+- Video support on how to build this plugin
+
 == Installation ==
 
 To install Footnotes:
