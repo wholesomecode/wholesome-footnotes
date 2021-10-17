@@ -23,6 +23,7 @@ at [Wholesome Code](https://wholesomecode.ltd).
 Happy exploring.
 
 == TODO ==
+- Finish adding PropTypes
 - Better README file
 - React settings page
 - Add excerpt to footnote title (with settings option for this)
