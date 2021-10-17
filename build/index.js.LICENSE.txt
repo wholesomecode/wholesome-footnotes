@@ -1,12 +1,26 @@
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
 /*! ../components/WysiwygControl */
 
 /*! ../plugins/transformations */
 
 /*! ./blocks/footnote-list */
 
+/*! ./checkPropTypes */
+
+/*! ./cjs/react-is.development.js */
+
 /*! ./editor.scss */
 
+/*! ./factoryWithTypeCheckers */
+
 /*! ./formats/footnote */
+
+/*! ./lib/ReactPropTypesSecret */
 
 /*! ./plugins/transformations */
 
@@ -31,6 +45,12 @@
 /*! @wordpress/rich-text */
 
 /*! lodash */
+
+/*! object-assign */
+
+/*! prop-types */
+
+/*! react-is */
 
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -93,9 +113,46 @@
   \*************************************/
 
 /*!****************************************!*\
+  !*** ./node_modules/react-is/index.js ***!
+  \****************************************/
+
+/*!****************************************!*\
   !*** ./src/plugins/transformations.js ***!
   \****************************************/
 
 /*!******************************************!*\
+  !*** ./node_modules/prop-types/index.js ***!
+  \******************************************/
+
+/*!******************************************!*\
   !*** ./src/components/WysiwygControl.js ***!
   \******************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/object-assign/index.js ***!
+  \*********************************************/
+
+/*!***************************************************!*\
+  !*** ./node_modules/prop-types/checkPropTypes.js ***!
+  \***************************************************/
+
+/*!***********************************************************!*\
+  !*** ./node_modules/react-is/cjs/react-is.development.js ***!
+  \***********************************************************/
+
+/*!************************************************************!*\
+  !*** ./node_modules/prop-types/factoryWithTypeCheckers.js ***!
+  \************************************************************/
+
+/*!*************************************************************!*\
+  !*** ./node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
+  \*************************************************************/
+
+/** @license React v16.13.1
+ * react-is.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */

@@ -149,8 +149,9 @@ export const setFootnotesOnDeletion = () => {
 	let footnoteInitialCount = 0;
 
 	document.addEventListener( 'keydown', debounce( () => {
-		if ( ! footnoteInitialCount ) {
-			footnoteInitialCount = document.querySelectorAll( '.wholesome-footnote' )?.length;
+		const footnoteCount = document.querySelectorAll( '.wholesome-footnote' )?.length;
+		if ( footnoteInitialCount < footnoteCount ) {
+			footnoteInitialCount = footnoteCount;
 		}
 	} ), 500 );
 

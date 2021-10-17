@@ -2,8 +2,11 @@
  * Footnotes.
  */
 
+// React Imports.
+import PropTypes from 'prop-types';
+
 // Import WordPress Components.
-import { RichTextToolbarButton, URLPopover } from '@wordpress/block-editor';
+import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { Button, Modal } from '@wordpress/components';
 import { dispatch, useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
@@ -30,7 +33,7 @@ const FootnoteBlock = ( text, uid ) => {
 
 // Create Footnotes Button with Colour Selection Popover.
 const FootnotesButton = ( props ) => {
-	const { contentRef, onChange, value } = props;
+	const { contentRef, isActive, onChange, value } = props;
 	const { activeFormats } = value;
 
 	// State to show popover.
@@ -38,7 +41,7 @@ const FootnotesButton = ( props ) => {
 	const [ footnote, setFootnote ] = useState( '' );
 
 	const meta = useSelect( ( select ) => select( 'core/editor' ).getEditedPostAttribute( 'meta' ) );
-	const footnotes = meta.wholesome_footnotes || [];
+	const footnotes = meta?.wholesome_footnotes || [];
 
 	const getActiveFootnote = () => {
 		// eslint-disable-next-line no-use-before-define
@@ -80,8 +83,7 @@ const FootnotesButton = ( props ) => {
 		<>
 			<RichTextToolbarButton
 				icon="info-outline"
-				// key={ isActive ? 'footnote' : 'footnotes-not-active' }
-				// name={ isActive ? 'footnote' : undefined }
+				isActive={ isActive }
 				onClick={ () => {
 					setShowPopover( true );
 				} }
@@ -189,3 +191,18 @@ registerFormatType(
 		title: __( 'Footnote', 'wholesome-footnotes' ),
 	}
 );
+
+FootnotesButton.propTypes = {
+	isActive: PropTypes.bool.isRequired,
+	contentRef: PropTypes.shape( {
+		current: PropTypes.objectOf( PropTypes.shape( {
+			id: PropTypes.string,
+		} ) ),
+	} ).isRequired,
+	onChange: PropTypes.func.isRequired,
+	value: PropTypes.shape( {
+		activeFormats: PropTypes.arrayOf( PropTypes.shape( {} ) ),
+		end: PropTypes.number,
+		start: PropTypes.number,
+	} ).isRequired,
+};
