@@ -91,7 +91,7 @@ module.exports = {
 			syntax: 'scss',
 		} ),
 	],
-} ;
+};
 
 // Prevent JS source maps in production.
 if ( isProduction ) {
