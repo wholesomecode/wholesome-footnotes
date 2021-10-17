@@ -55,6 +55,9 @@
 	}
 }
 
+/**
+ * Ensure active format that use dashicons are highlighted.
+ */
 .components-popover .components-button.is-active .dashicon::before {
 	background: #1e1e1e;
 	border-radius: 1px;
