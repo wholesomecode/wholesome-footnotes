@@ -8,7 +8,13 @@ import { Button, Modal } from '@wordpress/components';
 import { dispatch, useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { create, getTextContent, insert, registerFormatType, removeFormat, toggleFormat, useAnchorRef } from '@wordpress/rich-text';
+import {
+	create,
+	getTextContent,
+	insert,
+	registerFormatType,
+	toggleFormat,
+} from '@wordpress/rich-text';
 
 import WysiwygControl from '../components/WysiwygControl';
 import { setFootnoteNumbers } from '../plugins/transformations';
@@ -17,13 +23,14 @@ const name = 'wholesome/footnotes';
 
 const FootnoteBlock = ( text, uid ) => {
 	const number = '0';
-	const matches = text.match( /<a[\S\s]*? class="wholesome-footnote">[\S\s]*?<\/a>/gi );
-	return `<a aria-describedby="wholesome-footnote-list__heading" title="${__( 'Footnote' )}" class="wholesome-footnote" id="${ uid }" href="#footnote-${ uid }">${ text }<sup class="wholesome-footnote__number">${ number }</sup></a>`;
+	return `<a aria-describedby="wholesome-footnote-list__heading" `
+	+ `title="${ __( 'Footnote' ) }" class="wholesome-footnote" id="${ uid }" `
+	+ `href="#footnote-${ uid }">${ text }<sup class="wholesome-footnote__number">${ number }</sup></a>`;
 };
 
 // Create Footnotes Button with Colour Selection Popover.
 const FootnotesButton = ( props ) => {
-	const { contentRef, isActive, onChange, value } = props;
+	const { contentRef, onChange, value } = props;
 	const { activeFormats } = value;
 
 	// State to show popover.
@@ -31,13 +38,14 @@ const FootnotesButton = ( props ) => {
 	const [ footnote, setFootnote ] = useState( '' );
 
 	const meta = useSelect( ( select ) => select( 'core/editor' ).getEditedPostAttribute( 'meta' ) );
-	const footnotes = meta[ 'wholesome_footnotes' ] || [];
+	const footnotes = meta.wholesome_footnotes || [];
 
 	const getActiveFootnote = () => {
+		// eslint-disable-next-line no-use-before-define
 		const uid = getActiveFootnoteUID();
-		const selectedFootnote = footnotes?.filter( footnote => uid === footnote.uid );		
+		const selectedFootnote = footnotes?.filter( ( footnote ) => uid === footnote.uid );
 		if ( selectedFootnote && selectedFootnote.length ) {
-			return selectedFootnote[0]?.footnote || '';
+			return selectedFootnote[ 0 ]?.footnote || '';
 		}
 
 		return '';
@@ -82,9 +90,9 @@ const FootnotesButton = ( props ) => {
 			{ showPopover && (
 				<Modal
 					className="footnotes-popover"
-					onRequestClose={ ( { type } ) => { 
-						if ( 'blur' !== type ) {
-							setShowPopover( false );  
+					onRequestClose={ ( { type } ) => {
+						if ( type !== 'blur' ) {
+							setShowPopover( false );
 						}
 					} }
 					title={ __( 'Footnote', 'wholesome-footnotes' ) }
@@ -97,7 +105,8 @@ const FootnotesButton = ( props ) => {
 						} }
 						onLoad={
 							setTimeout( () => {
-								const tinyMce = document.querySelector( `#editor-${ contentRef?.current?.id }-footnote` );
+								const tinyMce = document
+									.querySelector( `#editor-${ contentRef?.current?.id }-footnote` );
 								if ( tinyMce ) {
 									tinyMce.focus();
 								}
@@ -111,12 +120,12 @@ const FootnotesButton = ( props ) => {
 							toolbar4: '',
 						} }
 					/>
-					<Button  
+					<Button
 						className="button button-secondary"
 						onClick={ () => {
-							let text = getTextContent( value ).substring( value.start, value.end );
+							const text = getTextContent( value ).substring( value.start, value.end );
 							let uid = getActiveFootnoteUID();
-						
+
 							if ( ! footnote ) {
 								onChange( toggleFormat( value, { type: name } ) ); // Remove Format.
 							}
@@ -133,9 +142,10 @@ const FootnotesButton = ( props ) => {
 								);
 							}
 
-							const newFootnotes = [...footnotes];
-							const key = Object.keys( newFootnotes ).find( key => newFootnotes[ key ].uid === uid ) || null;
-							const order = newFootnotes[uid]?.order || 0;
+							const newFootnotes = [ ...footnotes ];
+							const key = Object.keys( newFootnotes )
+								.find( ( key ) => newFootnotes[ key ].uid === uid ) || null;
+							const order = newFootnotes[ uid ]?.order || 0;
 
 							const note = {
 								uid,
@@ -159,11 +169,11 @@ const FootnotesButton = ( props ) => {
 							setShowPopover( false );
 							setFootnote( '' );
 							setFootnoteNumbers();
-						}}
+						} }
 						variant="secondary"
 					>
 						{ __( 'Save', 'wholesome-footnotes' ) }
-                    </Button>
+					</Button>
 				</Modal>
 			)}
 		</>

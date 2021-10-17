@@ -1,5 +1,6 @@
 import { createBlock } from '@wordpress/blocks';
 import { dispatch, select, subscribe } from '@wordpress/data';
+import { debounce } from 'lodash';
 
 export const setFootnoteNumbers = () => {
 	let i = 1;
@@ -41,7 +42,8 @@ export const setFootnoteNumbers = () => {
 					const uid = regex.exec( match )[ 1 ];
 					existingBlocks.push( uid );
 					if ( ! match.includes( newNumber ) ) {
-						const originalNumber = match.match( /<sup class="wholesome-footnote__number">[\S\s]*?<\/sup>/gi );
+						const originalNumber = match
+							.match( /<sup class="wholesome-footnote__number">[\S\s]*?<\/sup>/gi );
 						const newMatch = match.replace( originalNumber, newNumber );
 
 						const selectedBlock = newBlocks[ block.clientId ];
@@ -55,7 +57,7 @@ export const setFootnoteNumbers = () => {
 							};
 						}
 
-						uidOrder[uid] = i;
+						uidOrder[ uid ] = i;
 					}
 					i++;
 				} );
@@ -84,7 +86,7 @@ export const setFootnoteNumbers = () => {
 	}
 
 	// Reorder UIDs.
-	if ( Object.keys( uidOrder ).length > 0) {
+	if ( Object.keys( uidOrder ).length > 0 ) {
 		for ( const [ uid, order ] of Object.entries( uidOrder ) ) {
 			const key = Object.keys( newFootnotes ).find( ( key ) => newFootnotes[ key ].uid === uid ) || null;
 			if ( key ) {
@@ -118,7 +120,7 @@ const doReorderAndResubscribe = async () => {
 
 export const setFootnotesOnOrderChange = ( blockOrder = [], lastBlockOrder = [] ) => {
 	const unsubscribe = subscribe( () => {
-		if ( ! blockOrder ) {
+		if ( ! blockOrder.length ) {
 			blockOrder = select( 'core/block-editor' ).getBlockOrder();
 		}
 
@@ -141,4 +143,22 @@ export const setFootnotesOnOrderChange = ( blockOrder = [], lastBlockOrder = [] 
 			unsubscribe();
 		}, 500 );
 	} );
+};
+
+export const setFootnotesOnDeletion = () => {
+	let footnoteInitialCount = 0;
+
+	document.addEventListener( 'keydown', debounce( () => {
+		if ( ! footnoteInitialCount ) {
+			footnoteInitialCount = document.querySelectorAll( '.wholesome-footnote' )?.length;
+		}
+	} ), 500 );
+
+	document.addEventListener( 'keyup', debounce( () => {
+		const footnoteCount = document.querySelectorAll( '.wholesome-footnote' )?.length;
+		if ( footnoteInitialCount > footnoteCount ) {
+			setFootnoteNumbers();
+			footnoteInitialCount = footnoteCount;
+		}
+	} ), 500 );
 };
