@@ -1,3 +1,48 @@
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/@wordpress/scripts/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/@wordpress/scripts/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/editor.scss ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************/.footnotes-popover .components-base-control__label{display:block;font-weight:600;margin-bottom:1em}.footnotes-popover .wysiwyg-control{border:1px solid #8d96a0;border-radius:4px}.footnotes-popover .wysiwyg-control .wysiwyg-control__toolbar{border:0;display:block;margin:0;position:unset;top:0;transform:unset}.footnotes-popover .wysiwyg-control .wysiwyg-control__toolbar:empty{background:none;border-bottom:1px solid #ddd}.footnotes-popover .wysiwyg-control .wysiwyg-control__toolbar .mce-panel{background:transparent;box-shadow:none;display:block!important}.footnotes-popover .wysiwyg-control .wysiwyg-control__toolbar .mce-toolbar-grp{background:transparent;box-shadow:none}.footnotes-popover .wysiwyg-control .wysiwyg-control__body.mce-content-body{color:#191e23;font-family:"Noto Serif",serif;font-size:16px;line-height:1.8;padding:7px 12px}
+  \********************************************************************************************************************************************************************************************************************************************************************************************************/
+.footnotes-popover .components-base-control__label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 1em;
+}
+.footnotes-popover .wysiwyg-control {
+  border: 1px solid #8d96a0;
+  border-radius: 4px;
+  /**
+   * Because the editor is wrapped in `<BaseControl />`, TinyMCE
+   * will inherit the BaseControl styles by default. Here, we are
+   * resetting the styles to match the Block Editor defaults, but
+   * you can change them if you wish.
+   */
+}
+.footnotes-popover .wysiwyg-control .wysiwyg-control__toolbar {
+  border: 0;
+  display: block;
+  margin: 0;
+  position: unset;
+  top: 0;
+  transform: unset;
+}
+.footnotes-popover .wysiwyg-control .wysiwyg-control__toolbar:empty {
+  background: none;
+  border-bottom: 1px solid #dddddd;
+}
+.footnotes-popover .wysiwyg-control .wysiwyg-control__toolbar .mce-panel {
+  background: transparent;
+  box-shadow: none;
+  display: block !important;
+}
+.footnotes-popover .wysiwyg-control .wysiwyg-control__toolbar .mce-toolbar-grp {
+  background: transparent;
+  box-shadow: none;
+}
+.footnotes-popover .wysiwyg-control .wysiwyg-control__body.mce-content-body {
+  color: #191e23;
+  font-family: "Noto Serif", serif;
+  font-size: 16px;
+  line-height: 1.8;
+  padding: 7px 12px;
+}
+
+/*# sourceMappingURL=index.css.map*/

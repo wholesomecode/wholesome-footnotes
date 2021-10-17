@@ -7,8 +7,9 @@ export const setFootnoteNumbers = () => {
 	const blocks = select( 'core/block-editor' ).getBlocks();
 	const currentBlock = select( 'core/block-editor' ).getSelectedBlock();
 	const newBlocks = {};
+	const existingBlocks = [];
 	const meta = select( 'core/editor' ).getEditedPostAttribute( 'meta' );
-	const footnotes = meta[ 'wholesome_footnotes' ] || [];
+	const footnotes = meta?.wholesome_footnotes || [];
 	const uidOrder = {};
 
 	blocks.forEach( ( block ) => {
@@ -38,6 +39,7 @@ export const setFootnoteNumbers = () => {
 					const newNumber = `<sup class="wholesome-footnote__number">${ i }</sup>`;
 					const regex = new RegExp( 'id="(.*?)"', 'gi' );
 					const uid = regex.exec( match )[ 1 ];
+					existingBlocks.push( uid );
 					if ( ! match.includes( newNumber ) ) {
 						const originalNumber = match.match( /<sup class="wholesome-footnote__number">[\S\s]*?<\/sup>/gi );
 						const newMatch = match.replace( originalNumber, newNumber );
@@ -74,8 +76,12 @@ export const setFootnoteNumbers = () => {
 		}
 	} );
 
-	const newFootnotes = [ ...footnotes ];
+	const newFootnotes = [ ...footnotes.filter( ( { uid } ) => existingBlocks.includes( uid ) ) ];
 	let hasFootnotesChanged = false;
+
+	if ( newFootnotes.length !== footnotes.length ) {
+		hasFootnotesChanged = true;
+	}
 
 	// Reorder UIDs.
 	if ( Object.keys( uidOrder ).length > 0) {
