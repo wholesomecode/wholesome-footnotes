@@ -25,10 +25,6 @@ function setup() : void {
 	// Load blocks.
 	require_once ROOT_DIR . '/inc/blocks/blocks.php';
 	Blocks\setup();
-
-	// Load settings.
-	require_once ROOT_DIR . '/inc/settings/settings.php';
-	Settings\setup();
 }
 
 /**

@@ -3,11 +3,11 @@
  * Footnotes
  *
  * Plugin Name:       Footnotes
- * Plugin URI:        https://wholesomecode.ltd/plugins/wholesome-footnotes
+ * Plugin URI:        https://wholesomecode.ltd/plugins/footnotes
  * Description:       Insert footnotes in your Gutenberg blocks and add a list view block to the bottom of your post.
  * Requires at least: 5.8
  * Requires PHP:      7.0
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Wholesome Code <hello@wholesomecode.ltd>
  * Author URI:        https://wholesomecode.ltd
  * License:           GPL-2.0-or-later
@@ -47,14 +47,17 @@ const ROOT_DIR        = __DIR__;
 const ROOT_FILE       = __FILE__;
 
 require_once ROOT_DIR . '/inc/main.php';
-require_once ROOT_DIR . '/inc/licensing/class-licensing.php';
-
-/**
- * Licensing
- */
-Licensing\Licensing::get_instance();
+require_once ROOT_DIR . '/inc/updater/class-updater.php';
 
 /**
  * Load Plugin.
  */
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\setup' );
+
+/**
+ * Allow plugin to update from GitHub.
+ */
+$updater = new Updater( ROOT_FILE );
+$updater->set_username( 'wholesomecode' );
+$updater->set_repository( 'footnotes' );
+$updater->initialize();

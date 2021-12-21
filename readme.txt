@@ -1,8 +1,9 @@
 === Footnotes ===
 Contributors:      wholesomecode
 Tags:              block formats, format, footnotes
-Tested up to:      5.8.0
-Stable tag:        1.0.0
+Requires at least: 5.8
+Tested up to:      5.8.2
+Stable tag:        1.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -10,7 +11,7 @@ Insert footnotes in your Gutenberg blocks and add a list view block to the botto
 
 == Welcome Developer ==
 
-Thank you for descovering my plugin. I hope that you find it usful, either as
+Thank you for descovering my plugin. I hope that you find it useful, either as
 a standalone plugin for your WordPress website, or as parts for something 
 amazing that you are working on.
 
@@ -28,18 +29,18 @@ Happy exploring.
 - React settings page
 - Add excerpt to footnote title (with settings option for this)
 - Full inline comments
-- Full PDF guide on how to build this plugin
-- Video support on how to build this plugin
 
 == Installation ==
 
 To install Footnotes:
 
-1. Note that the plugin is only compatible with a WordPress Multisite Installation. 
-2. Upload the plugin files to the `/wp-content/plugins/wholesome-footnotes` directory, or install the plugin through the WordPress network plugins screen directly.
-3. Activate the plugin through the \'Plugins\' screen in WordPress
+1. Upload the plugin files to the `/wp-content/plugins/wholesome-footnotes` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the \'Plugins\' screen in WordPress
 
 == Changelog ==
 
 = 1.0.0 =
 * Initial Plugin.
+
+= 1.1.0 =
+* Added GitHub updater.
